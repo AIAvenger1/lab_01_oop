@@ -1,0 +1,44 @@
+@startuml
+title Sequence Diagram: Редагування Клітинки в lab01
+
+actor Користувач as User
+
+participant "MainPage" as MP
+participant "Spreadsheet" as SS
+participant "Cell" as C
+participant "ExpressionEvaluator" as EE
+participant "Logger" as Log
+
+== Вибір та Редагування Клітинки ==
+
+User -> MP: Вибрати клітинку (row, col)
+MP -> SS: Отримати клітинку(row, col)
+SS -> C: getCell(row, col)
+C --> SS: повернути Cell об'єкт
+SS --> MP: повернути Cell об'єкт
+MP --> User: відобразити клітинку для редагування
+
+User -> MP: Ввести новий вираз/значення
+MP -> SS: оновити клітинку(row, col, новий вираз)
+SS -> C: setExpression(новий вираз)
+C --> SS: підтвердження оновлення
+SS -> EE: обчислити вираз(новий вираз)
+EE -> SS: результат обчислення
+SS -> C: setValue(результат)
+C --> SS: підтвердження оновлення
+SS -> Log: Log("Клітинка(row, col) оновлена виразом: новий вираз")
+Log --> SS: підтвердження логування
+SS -> MP: оновити відображення клітинки(row, col, результат)
+MP --> User: відобразити оновлену клітинку
+
+== Обробка Помилок ==
+
+alt Вираз некоректний
+    EE -> SS: Помилка обчислення
+    SS -> MP: повідомлення про помилку
+    MP --> User: відобразити повідомлення про помилку
+    SS -> Log: Log("Помилка обчислення клітинки(row, col): деталі помилки")
+    Log --> SS: підтвердження логування
+end alt
+
+@enduml

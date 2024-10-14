@@ -1,0 +1,98 @@
+@startuml
+
+' Визначення класу App
+class App {
+    +App()
+}
+
+' Визначення класу MainPage
+class MainPage {
+    +int rows
+    +int columns
+    +Entry[,] cells
+    +bool showExpressions
+    -HashSet<(int, int)> evaluatingCells
+    +MainPage()
+    +void BuildSpreadsheet()
+    +string ColumnNumberToName(int col)
+    +void OnEntryTextChanged(object sender, TextChangedEventArgs e)
+    +void OnToggleModeClicked(object sender, EventArgs e)
+    +void UpdateCellDisplays()
+    +string GetCellExpression(int row, int col)
+    +bool IsEvaluating(int row, int col)
+    +void StartEvaluating(int row, int col)
+    +void StopEvaluating(int row, int col)
+    +void OnAddRowClicked(object sender, EventArgs e)
+    +void OnAddColumnClicked(object sender, EventArgs e)
+}
+
+' Визначення класу ExpressionEvaluator
+class ExpressionEvaluator {
+    -MainPage mainPage
+    -string expression
+    -int position
+    +ExpressionEvaluator(MainPage mainPage, string expression)
+    +double Evaluate()
+    -double ParseExpression()
+    -double ParseTerm()
+    -double ParseFactor()
+    -string ParseIdentifier()
+    -bool IsFunction(string identifier)
+    -double ParseFunction(string functionName)
+    -double ParseDivFunction()
+    -double ParseModFunction()
+    -double ParseMMaxFunction()
+    -double ParseMMinFunction()
+    -List<double> ParseFunctionArguments()
+    -double ParseNumber()
+    -double ParseCellReference(string identifier)
+    -int ColumnNameToNumber(string columnName)
+}
+
+' Визначення класу Cell
+class Cell {
+    +string Expression
+    +double Value
+    +Cell(int row, int col)
+    +void Evaluate()
+}
+
+' Визначення класу Spreadsheet
+class Spreadsheet {
+    +int Rows
+    +int Columns
+    +Cell[,] Cells
+    +Spreadsheet(int rows, int columns)
+    +void AddRow()
+    +void AddColumn()
+    +Cell GetCell(int row, int col)
+}
+
+' Визначення класу Function
+class Function {
+    +string Name
+    +List<double> Arguments
+    +double Execute()
+}
+
+' Визначення класу Logger
+class Logger {
+    +void Log(string message)
+}
+
+' Визначення інтерфейсу ILogger
+interface ILogger {
+    +void Log(string message)
+}
+
+' Визначення взаємозв'язків між класами
+App "1" --> "1" MainPage : Launches
+MainPage "1" --> "*" Spreadsheet : manages
+Spreadsheet "1" --> "*" Cell : contains
+MainPage "1" --> "*" ExpressionEvaluator : uses
+ExpressionEvaluator "1" --> "*" Function : executes
+ExpressionEvaluator "1" --> "1" Logger : logs
+MainPage "1" --> "1" Logger : uses
+Logger ..|> ILogger
+
+@enduml

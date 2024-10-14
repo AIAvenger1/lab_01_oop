@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="lab01.MainPage"
+             Title="Електронна Таблиця">
+    <StackLayout Orientation="Vertical" Padding="0" Spacing="0">
+        <!-- Панель з кнопками -->
+        <StackLayout Orientation="Horizontal" Padding="10" BackgroundColor="White" Spacing="10">
+            <Button Text="Перемкнути режим" Clicked="OnToggleModeClicked" />
+            <Button Text="Додати рядок" Clicked="OnAddRowClicked" />
+            <Button Text="Додати стовпець" Clicked="OnAddColumnClicked" />
+        </StackLayout>
+
+        <!-- Сітка для електронної таблиці -->
+        <ScrollView>
+            <Grid x:Name="SpreadsheetGrid"
+                  RowSpacing="1"
+                  ColumnSpacing="1"
+                  Padding="0"
+                  BackgroundColor="Gray">
+                <!-- Динамічний вміст буде додано в коді позаду -->
+            </Grid>
+        </ScrollView>
+    </StackLayout>
+</ContentPage>
